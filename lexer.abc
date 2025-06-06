@@ -5,12 +5,10 @@
 
 global ch: int;
 global currentPos: Pos = {1, 0};
-global updateVal: bool;
+global lengthVal: size_t;
 
 fn nextCh(updateVal: bool)
 {
-    static lengthVal: size_t;
-
     if (updateVal) {
         assert(lengthVal < sizeof(token.val) / sizeof(token.val[0]));
         token.val[lengthVal++] = ch;
@@ -32,16 +30,10 @@ fn isDigit(ch: int): bool
     return ch >= '0' && ch <= '9';
 }
 
-fn isAlpha(ch: int): bool
+fn isLetter(ch: int): bool
 {
-    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+    return ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'A';
 }
-
-fn isAlphaNum(ch: int): bool
-{
-    return isAlpha(ch) || isDigit(ch);
-}
-
 
 // -- exported: available for other translation units
 
@@ -49,6 +41,7 @@ global token: Token;
 
 fn getToken(): TokenKind
 {
+    lengthVal = 0;
     while (ch == 0 || ch == ' ' || ch == '\n' || ch == '\t') {
         nextCh(false);
     }
@@ -58,19 +51,25 @@ fn getToken(): TokenKind
             nextCh(true);
         }
         return token.kind = DECIMAL_LITERAL;
-    } else if (ch == '+') {
-        nextCh(true);
-        return token.kind = PLUS;
-    } else if (ch == EOF) {
-        return token.kind = EOI;
-    } else if (ch == '*') {
-        nextCh(true);
-        return token.kind = ASTERISK;
-    } else if (isAlpha(ch)) {
-        while (isAlphaNum(ch)) {
+    } else if (isLetter(ch)) {
+        while (isLetter(ch) || isDigit(ch)) {
             nextCh(true);
         }
         return token.kind = IDENTIFIER;
+    } else if (ch == '+') {
+        nextCh(true);
+        return token.kind = PLUS;
+    } else if (ch == '*') {
+        nextCh(true);
+        return token.kind = ASTERISK;
+    } else if (ch == '(') {
+        nextCh(true);
+        return token.kind = LPAREN;
+    } else if (ch == ')') {
+        nextCh(true);
+        return token.kind = RPAREN;
+    } else if (ch == EOF) {
+        return token.kind = EOI;
     } else {
         nextCh(true);
         return token.kind = BAD_TOKEN;
@@ -80,19 +79,14 @@ fn getToken(): TokenKind
 fn tokenKindStr(token: TokenKind): -> char
 {
     switch (token) {
-        default:
-            return "??";
-        case BAD_TOKEN:
-            return "BAD_TOKEN";
-        case EOI:
-            return "EOI";
-        case DECIMAL_LITERAL:
-            return "DECIMAL_LITERAL";
-        case PLUS:
-            return "PLUS";
-        case ASTERISK:
-            return "ASTERISK";
-        case IDENTIFIER:
-            return "IDENTIFIER";
+        case BAD_TOKEN: return "BAD_TOKEN";
+        case EOI: return "EOI";
+        case DECIMAL_LITERAL: return "DECIMAL_LITERAL";
+        case IDENTIFIER: return "IDENTIFIER";
+        case PLUS: return "PLUS";
+        case ASTERISK: return "ASTERISK";
+        case LPAREN: return "LPAREN";
+        case RPAREN: return "RPAREN";
+        default: return "??";
     }
 }
