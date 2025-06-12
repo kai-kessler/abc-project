@@ -36,7 +36,7 @@ fn releaseExpr(expr: ->Expr)
 fn printExprTree(expr: ->Expr)
 {
     if (expr->kind == EXPR_INTEGER) {
-        printf(" [ %llu ]", expr->decimal);
+        printf(" [ %s ]", expr->decimal);
     } else if (expr->kind >= EXPR_BINARY && expr->kind < EXPR_BINARY_END) {
         printf(" [ ");
         switch (expr->kind) {

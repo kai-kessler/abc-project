@@ -14,7 +14,7 @@ enum TokenKind
     RPAREN,
 };
 
-type TokenVal: array[12] of char;
+//type TokenVal: array[12] of char;
 
 struct Token
 {
