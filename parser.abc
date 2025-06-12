@@ -3,6 +3,9 @@
 @ "parser.hdr"
 @ "gen.hdr"
 
+fn parseTerm(): -> Expr;
+fn parseFactor(): -> Expr;
+
 fn parseExpr(): -> Expr
 {
     local left: -> Expr = parseTerm();

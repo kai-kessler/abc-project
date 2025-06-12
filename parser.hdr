@@ -1,5 +1,3 @@
 @ "expr.hdr"
 
 extern fn parseExpr(): -> Expr;
-extern fn parseTerm(): -> Expr;
-extern fn parseFactor(): -> Expr;
