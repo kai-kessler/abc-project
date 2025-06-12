@@ -1,4 +1,5 @@
-fn parseTerm(): int;
-fn parseFactor(): int;
+@ "expr.hdr"
 
-extern fn parseExpr(): int;
+extern fn parseExpr(): -> Expr;
+extern fn parseTerm(): -> Expr;
+extern fn parseFactor(): -> Expr;
