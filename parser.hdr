@@ -1,0 +1,4 @@
+fn parseTerm(): int;
+fn parseFactor(): int;
+
+extern fn parseExpr(): int;
